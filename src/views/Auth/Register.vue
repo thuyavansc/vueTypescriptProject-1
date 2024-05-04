@@ -23,6 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SelectContent from "@/components/ui/select/SelectContent.vue";
+// import store
+import { useAuthStore } from "@/stores/authStore";
 
 //Define Type
 type PAYLOAD = {
@@ -39,9 +41,6 @@ const form = ref<PAYLOAD>({
   email: "abc@markmail1.com",
   role: "ADMIN",
 });
-
-// import store
-import { useAuthStore } from "@/stores/authStore";
 
 //routing
 const router = useRouter();

@@ -20,5 +20,23 @@ export const useAuthStore = defineStore("AuthStore", {
         }
       });
     },
+
+    async loginUser(form: Record<string, string>) {
+      return new Promise<User>(async (resolve, reject) => {
+        try {
+          const { data } = await axios.post<
+            APIResponse<{
+              user: User;
+              accessToken: string;
+              refreshToken: string;
+            }>
+          >("/users/login", { ...form });
+          console.log("LOGIN", data.data);
+          resolve(data.data.user);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
   },
 });

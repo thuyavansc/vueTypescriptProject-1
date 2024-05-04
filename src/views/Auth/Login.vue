@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 //import { error } from "console";
+// import store
+import { useAuthStore } from "@/stores/authStore";
 
 //Define Type
 type PAYLOAD = {
@@ -25,15 +27,19 @@ type PAYLOAD = {
 //Create ref for form
 const form = ref<PAYLOAD>({
   password: "password",
-  username: "Mark",
+  username: "mark1",
 });
 
 //routing
 const router = useRouter();
 
+//use store
+const store = useAuthStore();
+
 //function for submit for and navigate/route after submit
 const onSubmit = async () => {
   try {
+    await store.loginUser(form.value);
     router.push("/");
   } catch (err) {
     console.log(err);
