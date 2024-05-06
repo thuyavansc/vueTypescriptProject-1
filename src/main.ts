@@ -2,11 +2,16 @@ import "./assets/index.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import { globalLoader } from "vue-global-loader";
 
 import App from "./App.vue";
 import router from "./router";
 
 const app = createApp(App);
+
+app.use(globalLoader, {
+  // Options
+});
 
 app.use(createPinia());
 app.use(router);

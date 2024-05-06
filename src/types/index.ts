@@ -23,3 +23,28 @@ export type User = {
   updatedAt: string;
   username: string;
 };
+
+export type Category = {
+  __v: number;
+  _id: string;
+  updatedAt: string;
+  createdAt: string;
+  owner: string;
+  name: string;
+};
+
+type PaginationContent = {
+  limit: number;
+  page: number;
+  totalPages: number;
+  serialNumberStartFrom: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: null | number;
+  nextPage: null | number;
+};
+
+export type Categories = PaginationContent & {
+  totalCategories: number;
+  categories: Category[];
+};

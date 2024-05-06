@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 // import Login from "../views/Auth/Login.vue";
 import Login from "@/views/Auth/Login.vue";
 import Register from "@/views/Auth/Register.vue";
+import Category from "@/views/Category.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,11 @@ const router = createRouter({
       path: "/auth/register",
       name: "auth-register",
       component: Register,
+    },
+    {
+      path: "/category",
+      name: "category",
+      component: Category,
     },
   ],
 });
