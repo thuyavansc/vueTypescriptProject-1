@@ -55,7 +55,7 @@ const fetchCategoris = async () => {
   } catch (error) {
     console.log(error);
   } finally {
-    //destroyLoader();
+    destroyLoader();
   }
 };
 
