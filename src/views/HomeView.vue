@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import { Button } from "@/components/ui/button";
-</script>
+import ProductModel from "@/components/model/ProductModel.vue";
 
+import productModel from "@/composables/useProductModel";
+const { onOpen, isOpen } = productModel();
+</script>
 <template>
-  <h1 class="text-blue-700">Home View</h1>
-  <Button variant="destructive" class="m-2">Click me</Button>
-  <h1></h1>
+  <ProductModel v-if="isOpen" />
+
+  <div class="mx-auto w-full max-w-4xl my-10">
+    <div class="flex justify-between items-center">
+      <h3 class="text-2xl font-bold">All Products</h3>
+      <Button @click="onOpen">Add Products</Button>
+    </div>
+  </div>
 </template>
