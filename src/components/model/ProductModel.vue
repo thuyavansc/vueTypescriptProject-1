@@ -2,7 +2,9 @@
 import { ref, computed } from "vue";
 
 import Model from "@/components/ui/Model.vue";
+import FileUploader from "@/components/ui/FileUploader.vue";
 import productModel from "@/composables/useProductModel";
+import { useObjectUrl } from "@vueuse/core";
 
 const { isOpen, onClose } = productModel();
 
@@ -47,12 +49,67 @@ import { useCategoryStore } from "@/stores/categoryStore";
 
 const categoryStore = useCategoryStore();
 const categories = computed(() => categoryStore.categoriesData.categories);
+const mainImagePreview = ref<string[]>([]);
+const subImagePreview = ref<string[]>([]);
+
+const onMainImageDrop = (files: File[] | null) => {
+  form.value.mainImage = files && files.length > 0 ? files[0] : undefined;
+  if (files && files.length) {
+    files.forEach((file, index) => {
+      if (index === 0) {
+        const url = useObjectUrl(file);
+        if (url.value) {
+          mainImagePreview.value.push(url.value);
+        }
+      }
+    });
+  }
+};
+
+const onMainImageChange = (files: File[] | null) => {
+  form.value.mainImage = files && files.length > 0 ? files[0] : undefined;
+  if (files && files.length) {
+    Array.from(files).forEach((file, index) => {
+      if (index === 0) {
+        const url = useObjectUrl(file);
+        if (url.value) {
+          mainImagePreview.value.push(url.value);
+        }
+      }
+    });
+  }
+};
+
+const onSubImageDrop = (files: File[] | null) => {
+  form.value.subImage = files && files.length > 0 ? files : undefined;
+  if (files && files.length) {
+    files.forEach((file, index) => {
+      const url = useObjectUrl(file);
+      if (url.value) {
+        subImagePreview.value.push(url.value);
+      }
+    });
+  }
+};
+
+const onSubImageChange = (files: File[] | null) => {
+  form.value.subImage =
+    files && files.length > 0 ? Array.from(files) : undefined;
+  if (files && files.length) {
+    Array.from(files).forEach((file, index) => {
+      const url = useObjectUrl(file);
+      if (url.value) {
+        subImagePreview.value.push(url.value);
+      }
+    });
+  }
+};
 </script>
 
 <template>
   <Model :isOpen="isOpen" @on-close="onClose">
     <div class="overflow-y-auto h-[500px] max-h-[600px]">
-      <form action="">
+      <form action="" class="grid gap-y-4">
         <div class="grid gap-2">
           <Label for="name">Name</Label>
           <Input id="name" type="text" placeholder="name" v-model="form.name" />
@@ -75,6 +132,44 @@ const categories = computed(() => categoryStore.categoriesData.categories);
             v-model="form.stock"
           />
         </div>
+        <div class="grid gap-2">
+          <template v-if="!form.mainImage">
+            <Label for="mImage">Main Image</Label>
+            <FileUploader
+              @on-change="onMainImageChange"
+              @on-drop="onMainImageDrop"
+              :multiple="false"
+            />
+          </template>
+
+          <div class="flex gap-x-2 my-2" v-else>
+            <img
+              v-for="img in mainImagePreview"
+              :src="img"
+              class="h-40 w-auto object-cover object-center border"
+            />
+          </div>
+        </div>
+
+        <div class="grid gap-2">
+          <template v-if="!form.subImage">
+            <Label for="mImage">Sub Images</Label>
+            <FileUploader
+              @on-change="onSubImageChange"
+              @on-drop="onSubImageDrop"
+              :multiple="true"
+            />
+          </template>
+
+          <div class="flex gap-x-2 my-2" v-else>
+            <img
+              v-for="img in subImagePreview"
+              :src="img"
+              class="h-40 w-auto object-cover object-center border"
+            />
+          </div>
+        </div>
+
         <div class="grid gap-2">
           <Label for="decription">Decription</Label>
           <Input
