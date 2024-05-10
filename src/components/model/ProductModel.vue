@@ -19,6 +19,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { useGlobalLoader } from "vue-global-loader";
 const { displayLoader, destroyLoader } = useGlobalLoader();
 
@@ -46,8 +47,11 @@ const form = ref<PAYLOAD>({
 });
 
 import { useCategoryStore } from "@/stores/categoryStore";
-
 const categoryStore = useCategoryStore();
+
+import { useProductStore } from "@/stores/productStore";
+const productStore = useProductStore();
+
 const categories = computed(() => categoryStore.categoriesData.categories);
 const mainImagePreview = ref<string[]>([]);
 const subImagePreview = ref<string[]>([]);
@@ -81,7 +85,7 @@ const onMainImageChange = (files: File[] | null) => {
 };
 
 const onSubImageDrop = (files: File[] | null) => {
-  form.value.subImage = files && files.length > 0 ? files : undefined;
+  form.value.subImages = files && files.length > 0 ? files : undefined;
   if (files && files.length) {
     files.forEach((file, index) => {
       const url = useObjectUrl(file);
@@ -93,7 +97,7 @@ const onSubImageDrop = (files: File[] | null) => {
 };
 
 const onSubImageChange = (files: File[] | null) => {
-  form.value.subImage =
+  form.value.subImages =
     files && files.length > 0 ? Array.from(files) : undefined;
   if (files && files.length) {
     Array.from(files).forEach((file, index) => {
@@ -102,6 +106,18 @@ const onSubImageChange = (files: File[] | null) => {
         subImagePreview.value.push(url.value);
       }
     });
+  }
+};
+
+const onSubmit = async () => {
+  try {
+    displayLoader();
+    await productStore.createProduct(form.value);
+    onClose();
+  } catch (error) {
+    console.log(error);
+  } finally {
+    destroyLoader();
   }
 };
 </script>
@@ -197,6 +213,7 @@ const onSubImageChange = (files: File[] | null) => {
             </SelectContent>
           </Select>
         </div>
+        <Button class="w-full" type="submit"> Create Product </Button>
       </form>
     </div>
   </Model>
